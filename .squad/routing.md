@@ -11,6 +11,7 @@
 | Worker, background, scheduled, timer, refresh, `BackgroundService`, `IHostedService`, periodic, 15-minute | Alex |
 | Test, testing, integration test, e2e, validation, service discovery test, data flow test, health check test | Bobbie |
 | Architecture, design, project structure, solution structure, cross-cutting | Holden (lead decision) |
+| Simple bug fix, single-file edit, add endpoint, write docs, add test | @copilot (if issue is scoped + clear) |
 | All services, full stack, team | Fan-out to relevant agents |
 
 ## Review Gates

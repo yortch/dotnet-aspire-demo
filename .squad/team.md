@@ -16,5 +16,21 @@
 | Drummer | Frontend Dev | Blazor Server dashboard, UI components, current conditions display, 5-day forecast, city management UI | ⚛️ |
 | Alex | Worker Dev | Background worker service (Aspire Worker template), scheduled 15-minute refresh, service-to-service calls | ⚙️ |
 | Bobbie | Tester | End-to-end tests, service discovery validation, integration tests, data flow verification | 🧪 |
+| @copilot | Coding Agent | Single-file implementations, bug fixes, test scaffolding, docs, endpoint additions | 🤖 |
 | Scribe | Session Logger | — | 📋 |
 | Ralph | Work Monitor | — | 🔄 |
+
+<!-- copilot-auto-assign: true -->
+
+### @copilot Capability Profile
+
+| Category | Fit | Examples |
+|----------|-----|---------|
+| Single-file implementation | 🟢 | Add an endpoint, implement a model, write a service class |
+| Bug fixes with clear repro | 🟢 | Fix null reference, correct API response format |
+| Test writing | 🟢 | Unit tests, integration test scaffolding |
+| Documentation | 🟢 | README updates, XML doc comments, API docs |
+| Multi-file changes (2-3 files) | 🟡 | Add endpoint + model + test |
+| Aspire wiring (AppHost) | 🔴 | Complex orchestration, WithReference/WaitFor chains |
+| Cross-service coordination | 🔴 | Changes spanning 4+ services |
+| Architecture decisions | 🔴 | Service boundary changes, data flow redesign |
