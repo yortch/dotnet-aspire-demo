@@ -8,3 +8,4 @@
 
 ## Learnings
 _Append new learnings below this line._
+- PRD (`docs/PRD.md`) was regenerated from the fully implemented codebase. All sections derived from actual source files — models, endpoints, services, AppHost wiring, test files. No invented features. Covers all 19 work items across 4 phases.
