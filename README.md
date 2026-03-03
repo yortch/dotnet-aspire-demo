@@ -62,11 +62,18 @@ The solution is composed of six projects orchestrated by .NET Aspire:
    ```
 
 2. **Set your OpenWeatherMap API key:**
+
+   Get a free API key by signing up at [openweathermap.org/api](https://openweathermap.org/api), then go to **My API Keys** to copy your key.
+
    ```bash
+   dotnet user-secrets init --project WeatherDashboard.WeatherApi
    dotnet user-secrets set "OpenWeatherMap:ApiKey" "YOUR_KEY" --project WeatherDashboard.WeatherApi
    ```
 
 3. **Run the application:**
+
+   Make sure **Docker Desktop is running** before starting — Aspire uses it to spin up the Redis and PostgreSQL containers.
+
    ```bash
    dotnet run --project WeatherDashboard.AppHost
    ```
