@@ -9,6 +9,10 @@ builder.AddNpgsqlDbContext<PreferencesDbContext>("preferencesdb");
 
 builder.Services.AddOpenApi();
 
+// Health check for PostgreSQL connectivity (supplements auto-registered Aspire health check)
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<PreferencesDbContext>("preferencesdb");
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
