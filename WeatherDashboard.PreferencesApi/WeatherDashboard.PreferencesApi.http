@@ -1,0 +1,6 @@
+@WeatherDashboard.PreferencesApi_HostAddress = http://localhost:5117
+
+GET {{WeatherDashboard.PreferencesApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
