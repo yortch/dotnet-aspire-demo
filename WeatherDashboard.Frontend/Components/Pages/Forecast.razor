@@ -1,0 +1,94 @@
+@page "/forecast/{City}"
+@rendermode InteractiveServer
+
+<PageTitle>Forecast  @City</PageTitle>
+
+<div class="dashboard">
+    <header class="dashboard-header">
+        <button @onclick="GoBack" class="btn-back"> Back to Dashboard</button>
+        <h1> 5-Day Forecast for @City</h1>
+    </header>
+
+    @if (isLoading)
+    {
+        <div class="forecast-table">
+            @for (int i = 0; i < 5; i++)
+            {
+                <div class="forecast-row skeleton">
+                    <div class="skeleton-line"></div>
+                </div>
+            }
+        </div>
+    }
+    else if (hasError)
+    {
+        <div class="error-state">
+            <p> Unable to load forecast data. Please try again later.</p>
+            <button @onclick="LoadForecast" class="btn-retry">Retry</button>
+        </div>
+    }
+    else if (forecastData is not null)
+    {
+        <div class="forecast-table">
+            <div class="forecast-header-row">
+                <span>Date</span>
+                <span></span>
+                <span>Conditions</span>
+                <span>High</span>
+                <span>Low</span>
+            </div>
+            @foreach (var day in forecastData.Days)
+            {
+                <div class="forecast-row">
+                    <span class="forecast-date">@day.Date.ToString("ddd, MMM d")</span>
+                    <img src="https://openweathermap.org/img/wn/@(day.Icon)@@2x.png" alt="@day.Conditions" class="forecast-icon" />
+                    <span class="forecast-conditions">@day.Conditions</span>
+                    <span class="forecast-high">@($"{day.HighF:F0}")F / @($"{day.HighC:F0}")C</span>
+                    <span class="forecast-low">@($"{day.LowF:F0}")F / @($"{day.LowC:F0}")C</span>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@inject WeatherApiClient WeatherApi
+@inject NavigationManager Navigation
+
+@code {
+    [Parameter]
+    public string City { get; set; } = string.Empty;
+
+    private Models.Forecast? forecastData;
+    private bool isLoading = true;
+    private bool hasError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadForecast();
+    }
+
+    private async Task LoadForecast()
+    {
+        isLoading = true;
+        hasError = false;
+        StateHasChanged();
+
+        try
+        {
+            forecastData = await WeatherApi.GetForecastAsync(City);
+        }
+        catch
+        {
+            hasError = true;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
