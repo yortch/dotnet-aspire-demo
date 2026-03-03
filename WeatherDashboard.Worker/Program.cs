@@ -1,4 +1,4 @@
-using WeatherDashboard.Worker;
+using WeatherDashboard.Worker.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -9,7 +9,11 @@ builder.Services.AddHttpClient("weatherapi", client =>
 builder.Services.AddHttpClient("preferencesapi", client =>
     client.BaseAddress = new Uri("https+http://preferencesapi"));
 
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddSingleton<WeatherRefreshHealthCheck>();
+builder.Services.AddHealthChecks()
+    .AddCheck<WeatherRefreshHealthCheck>("weather-refresh");
+
+builder.Services.AddHostedService<WeatherRefreshWorker>();
 
 var host = builder.Build();
 host.Run();
