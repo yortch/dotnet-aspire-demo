@@ -5,11 +5,7 @@ using WeatherDashboard.WeatherApi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddRedisDistributedCache("redis", configureOptions: options =>
-{
-    // Accept Aspire Redis container's self-signed TLS certificate for local development
-    options.CertificateValidation += (_, _, _, _) => true;
-});
+builder.AddRedisDistributedCache("redis");
 
 builder.Services.AddOpenApi();
 

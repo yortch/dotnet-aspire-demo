@@ -1,6 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var redis = builder.AddRedis("redis");
+var redis = builder.AddRedis("redis").WithoutHttpsCertificate();
 var postgres = builder.AddPostgres("postgres").AddDatabase("preferencesdb");
 
 var weatherapi = builder.AddProject<Projects.WeatherDashboard_WeatherApi>("weatherapi")

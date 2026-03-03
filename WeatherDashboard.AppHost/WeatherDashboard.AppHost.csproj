@@ -18,6 +18,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
+    <NoWarn>$(NoWarn);ASPIRECERTIFICATES001</NoWarn>
     <UserSecretsId>cf5de110-cc47-4f52-90b7-40d42fbbdb5f</UserSecretsId>
   </PropertyGroup>
 
