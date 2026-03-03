@@ -1,7 +1,171 @@
-﻿@page "/"
+@page "/"
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Weather Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="dashboard">
+    <header class="dashboard-header">
+        <h1>🌤️ Weather Dashboard</h1>
+        <div class="add-city-form">
+            <input @bind="newCity" @bind:event="oninput" @onkeydown="HandleKeyDown"
+                   placeholder="Enter city name..." class="city-input" />
+            <button @onclick="AddCity" disabled="@(string.IsNullOrWhiteSpace(newCity))" class="btn-add">
+                + Add City
+            </button>
+        </div>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="message @messageClass">@message</div>
+        }
+    </header>
 
-Welcome to your new app.
+    @if (isLoading)
+    {
+        <div class="card-grid">
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="weather-card skeleton">
+                    <div class="skeleton-line wide"></div>
+                    <div class="skeleton-circle"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+            }
+        </div>
+    }
+    else if (hasError)
+    {
+        <div class="error-state">
+            <p>⚠️ Unable to connect to weather services. Please try again later.</p>
+            <button @onclick="LoadDashboard" class="btn-retry">Retry</button>
+        </div>
+    }
+    else if (weatherData.Count == 0)
+    {
+        <div class="empty-state">
+            <p>No cities added yet. Add a city above to get started!</p>
+        </div>
+    }
+    else
+    {
+        <div class="card-grid">
+            @foreach (var weather in weatherData)
+            {
+                <div class="weather-card" @onclick="() => NavigateToForecast(weather.City)">
+                    <button class="btn-remove" @onclick="() => RemoveCity(weather.City)" @onclick:stopPropagation="true" title="Remove city">✕</button>
+                    <h2>@weather.City</h2>
+                    <img src="https://openweathermap.org/img/wn/@(weather.Icon)@@2x.png" alt="@weather.Conditions" class="weather-icon" />
+                    <div class="temp">@($"{weather.TemperatureF:F0}")°F <span class="temp-alt">/ @($"{weather.TemperatureC:F0}")°C</span></div>
+                    <div class="conditions">@weather.Conditions</div>
+                    <div class="details">
+                        <span>💧 @weather.Humidity%</span>
+                        <span>💨 @($"{weather.WindSpeedMph:F0}") mph</span>
+                    </div>
+                    <div class="card-hint">Click for 5-day forecast →</div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@inject WeatherApiClient WeatherApi
+@inject PreferencesApiClient PreferencesApi
+@inject NavigationManager Navigation
+
+@code {
+    private List<CurrentWeather> weatherData = [];
+    private string newCity = string.Empty;
+    private string message = string.Empty;
+    private string messageClass = string.Empty;
+    private bool isLoading = true;
+    private bool hasError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDashboard();
+    }
+
+    private async Task LoadDashboard()
+    {
+        isLoading = true;
+        hasError = false;
+        weatherData.Clear();
+        StateHasChanged();
+
+        try
+        {
+            var preferences = await PreferencesApi.GetUserPreferencesAsync("demo-user");
+            var tasks = preferences.Select(p => WeatherApi.GetCurrentWeatherAsync(p.City)).ToList();
+            var results = await Task.WhenAll(tasks);
+            weatherData = results.Where(r => r is not null).Cast<CurrentWeather>().ToList();
+        }
+        catch
+        {
+            hasError = true;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task AddCity()
+    {
+        if (string.IsNullOrWhiteSpace(newCity)) return;
+
+        var cityName = newCity.Trim();
+        message = string.Empty;
+
+        try
+        {
+            var response = await PreferencesApi.AddCityAsync("demo-user", cityName);
+            if (response.IsSuccessStatusCode)
+            {
+                newCity = string.Empty;
+                await LoadDashboard();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                message = $"'{cityName}' is already in your dashboard.";
+                messageClass = "message-warning";
+            }
+            else
+            {
+                message = "Failed to add city. Please try again.";
+                messageClass = "message-error";
+            }
+        }
+        catch
+        {
+            message = "Unable to reach the server. Please try again.";
+            messageClass = "message-error";
+        }
+    }
+
+    private async Task RemoveCity(string city)
+    {
+        try
+        {
+            await PreferencesApi.RemoveCityAsync("demo-user", city);
+            await LoadDashboard();
+        }
+        catch
+        {
+            message = "Failed to remove city. Please try again.";
+            messageClass = "message-error";
+        }
+    }
+
+    private void NavigateToForecast(string city)
+    {
+        Navigation.NavigateTo($"/forecast/{Uri.EscapeDataString(city)}");
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await AddCity();
+        }
+    }
+}

@@ -29,6 +29,7 @@ public class WeatherRefreshHealthCheck : IHealthCheck
 
         if (_lastRefreshTime is null)
         {
+            // No refresh has run yet — healthy during grace period
             if (DateTimeOffset.UtcNow - _startTime < GracePeriod)
             {
                 return Task.FromResult(HealthCheckResult.Healthy("No refresh cycle yet (within grace period)", data: data));
