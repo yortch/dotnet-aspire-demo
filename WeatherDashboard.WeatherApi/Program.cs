@@ -1,9 +1,19 @@
+using WeatherDashboard.WeatherApi.Endpoints;
+using WeatherDashboard.WeatherApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddRedisClient("redis");
+builder.AddRedisDistributedCache("redis");
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddHttpClient<OpenWeatherMapService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.openweathermap.org/");
+});
+
+builder.Services.AddSingleton<WeatherCacheService>();
 
 var app = builder.Build();
 
@@ -14,28 +24,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapWeatherEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
