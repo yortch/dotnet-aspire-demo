@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "universes_allowed": ["the-expanse"],
+  "max_agents_per_universe": 12,
+  "overflow_strategy": "diegetic-expansion"
+}

@@ -1,0 +1,11 @@
+{
+  "assignments": [
+    {
+      "assignment_id": "aspire-weather-dash-001",
+      "universe": "the-expanse",
+      "created_at": "2026-03-03T15:50:01Z",
+      "agents": ["Holden", "Naomi", "Amos", "Drummer", "Alex", "Bobbie"],
+      "reason": "Initial team cast for .NET Aspire weather dashboard project"
+    }
+  ]
+}
