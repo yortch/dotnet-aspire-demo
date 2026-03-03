@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using WeatherDashboard.PreferencesApi.Data;
+using WeatherDashboard.PreferencesApi.Endpoints;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -12,21 +16,13 @@ app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    // Auto-migrate in development
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<PreferencesDbContext>();
+    await db.Database.MigrateAsync();
 }
 
-app.MapGet("/preferences", () =>
-{
-    return new[] { new Preference("temperature-unit", "celsius"), new Preference("theme", "dark") };
-})
-.WithName("GetPreferences");
+app.MapPreferencesEndpoints();
 
 app.Run();
-
-record Preference(string Key, string Value);
-
-// Placeholder DbContext for PostgreSQL integration
-public class PreferencesDbContext : Microsoft.EntityFrameworkCore.DbContext
-{
-    public PreferencesDbContext(Microsoft.EntityFrameworkCore.DbContextOptions<PreferencesDbContext> options)
-        : base(options) { }
-}
