@@ -70,6 +70,7 @@ public class WeatherRefreshWorker(
                 failureCount++;
             }
 
+            // Stagger between cities to avoid hammering APIs
             if (i < cities.Count - 1)
             {
                 await Task.Delay(CityStagger, ct);

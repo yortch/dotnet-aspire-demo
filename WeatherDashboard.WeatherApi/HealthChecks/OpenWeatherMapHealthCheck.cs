@@ -19,6 +19,7 @@ public class OpenWeatherMapHealthCheck(
             }
 
             var client = httpClientFactory.CreateClient(nameof(Services.OpenWeatherMapService));
+            // Lightweight call using a well-known city
             var response = await client.GetAsync(
                 $"data/2.5/weather?q=London&appid={apiKey}&units=imperial",
                 cancellationToken);
