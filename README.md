@@ -77,7 +77,34 @@ I want the team organized by Aspire integration:
 Set up the team. Each agent should understand their specific Aspire integration deeply.
 ```
 
-Once the squad is assembled, you can ask copilot who is in your squad:
+### Push the Repo to GitHub
+
+In a separate terminal, commit the generated Squad configuration and push:
+
+```bash
+git add .github/ .squad/ .squad-templates/ .gitattributes
+git commit -m "feat: add copilot to squad"
+
+git branch -M main
+git remote add origin https://github.com/yortch/dotnet-aspire-squad-demo.git
+git push --set-upstream origin main
+```
+
+#### Optional: Add Copilot Coding Agent as a Squad Member
+
+Create a new **classic** personal access token at <https://github.com/settings/tokens/new> with `repo` scope, then paste secret when prompted:
+
+```bash
+gh secret set COPILOT_ASSIGN_TOKEN
+```
+
+Open the Copilot CLI and prompt:
+
+```text
+Add copilot to my squad
+```
+
+Once the squad is fully assembled, you can ask copilot who is in your squad:
 
 ```
 Who's in my squad?
@@ -96,33 +123,6 @@ Squad responds with your team — *Squad v0.5.4, cast from The Expanse universe*
 | 🤖 | @copilot | Coding Agent — single-file tasks, bug fixes, docs |
 | 📋 | Scribe | Session Logger |
 | 🔄 | Ralph | Work Monitor |
-
-### Push the Repo to GitHub
-
-In a separate terminal, commit the generated Squad configuration and push:
-
-```bash
-git add .github/ .squad/ .squad-templates/ .gitattributes
-git commit -m "feat: add copilot to squad"
-
-git branch -M main
-git remote add origin https://github.com/yortch/dotnet-aspire-squad-demo.git
-git push --set-upstream origin main
-```
-
-#### Optional: Add Copilot as a Squad Member
-
-Create a new **classic** personal access token at <https://github.com/settings/tokens/new> with `repo` scope, then paste secret when prompted:
-
-```bash
-gh secret set COPILOT_ASSIGN_TOKEN
-```
-
-Open the Copilot CLI and prompt:
-
-```text
-Add copilot to my squad
-```
 
 ### Create the PRD and Project Board
 
