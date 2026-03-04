@@ -32,8 +32,8 @@ Use the `/login` command to login:
 Create the repo and bootstrap the Squad tooling:
 
 ```bash
-mkdir dotnet-aspire-demo
-cd dotnet-aspire-demo
+mkdir dotnet-aspire-squad-demo
+cd dotnet-aspire-squad-demo
 git init
 npx github:bradygaster/squad --auto-assign
 ```
@@ -106,16 +106,16 @@ git add .github/ .squad/ .squad-templates/ .gitattributes
 git commit -m "feat: add copilot to squad"
 
 git branch -M main
-git remote add origin https://github.com/yortch/dotnet-aspire-demo.git
+git remote add origin https://github.com/yortch/dotnet-aspire-squad-demo.git
 git push --set-upstream origin main
 ```
 
 #### Optional: Add Copilot as a Squad Member
 
-Create a new **classic** personal access token at <https://github.com/settings/tokens/new>, then grant project scope:
+Create a new **classic** personal access token at <https://github.com/settings/tokens/new> with `repo` scope, then paste secret when prompted:
 
 ```bash
-gh auth refresh -s project
+gh secret set COPILOT_ASSIGN_TOKEN
 ```
 
 Open the Copilot CLI and prompt:
@@ -126,10 +126,16 @@ Add copilot to my squad
 
 ### Create the PRD and Project Board
 
+**NOTE:** You must authenticate to GitHub with project scope to github to be able to create GitHub Project Boards:
+
+```bash
+gh auth refresh -s project
+```
+
 Open the Copilot CLI and connect to the repo:
 
 ```text
-connect to yortch/dotnet-aspire-demo
+connect to yortch/dotnet-aspire-squad-demo
 ```
 
 Then prompt it to generate the PRD and project board:
@@ -259,8 +265,8 @@ The solution is composed of six projects orchestrated by .NET Aspire:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yortch/dotnet-aspire-demo.git
-   cd dotnet-aspire-demo
+   git clone https://github.com/yortch/dotnet-aspire-squad-demo.git
+   cd dotnet-aspire-squad-demo
    ```
 
 2. **Set your OpenWeatherMap API key:**
@@ -289,7 +295,7 @@ The solution is composed of six projects orchestrated by .NET Aspire:
 ### Project Structure
 
 ```
-dotnet-aspire-demo/
+dotnet-aspire-squad-demo/
 ├── WeatherDashboard.AppHost/          # Aspire orchestrator
 │   └── AppHost.cs                     # Service and container definitions
 ├── WeatherDashboard.Frontend/         # Blazor Server UI
