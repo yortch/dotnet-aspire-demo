@@ -77,6 +77,26 @@ I want the team organized by Aspire integration:
 Set up the team. Each agent should understand their specific Aspire integration deeply.
 ```
 
+Once the squad is assembled, you can ask copilot who is in your squad:
+
+```
+Who's in my squad?
+```
+
+Squad responds with your team — *Squad v0.5.4, cast from The Expanse universe* (7 active agents + Scribe + Ralph):
+
+| Emoji | Name | Role |
+|-------|------|------|
+| 🏗️ | Holden | AppHost Lead — orchestration, service discovery, Aspire defaults |
+| 🔴 | Naomi | Redis Dev — caching, IDistributedCache, weather cache layer |
+| 🐘 | Amos | PostgreSQL Dev — EF Core, user preferences data model |
+| ⚛️ | Drummer | Frontend Dev — Blazor Server dashboard, UI components |
+| ⚙️ | Alex | Worker Dev — background refresh service |
+| 🧪 | Bobbie | Tester — integration tests, service discovery validation |
+| 🤖 | @copilot | Coding Agent — single-file tasks, bug fixes, docs |
+| 📋 | Scribe | Session Logger |
+| 🔄 | Ralph | Work Monitor |
+
 ### Push the Repo to GitHub
 
 In a separate terminal, commit the generated Squad configuration and push:
